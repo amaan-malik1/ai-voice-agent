@@ -10,109 +10,100 @@ const containerVariants: Variants = {
 
 const itemVariants: Variants = {
   hidden: { opacity: 0, y: 40 },
-  show:   { opacity: 1, y: 0,  transition: { duration: 0.75, ease: 'easeOut' } },
+  show: { opacity: 1, y: 0, transition: { duration: 0.75, ease: 'easeOut' } },
 }
 
 const STATS = [
-  { num: '99+',  label: 'Languages' },
-  { num: '<1s',  label: 'Response' },
-  { num: '∞',    label: 'Context' },
+  { num: '99+', label: 'Languages' },
+  { num: '<1s', label: 'Response' },
+  { num: 'Full', label: 'Context' },
 ]
 
 export default function Hero({ onOpenApp }: { onOpenApp: () => void }) {
   return (
-    <section id="hero" className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden px-6 md:px-12 pt-24">
-
-      {/* Background radial glows */}
+    <section id="hero" className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden px-6 pt-24 md:px-12">
       <div className="pointer-events-none absolute inset-0" aria-hidden>
-        <div className="absolute top-1/2 left-1/3 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-violet/10 blur-[120px]" />
-        <div className="absolute top-1/3 right-1/4 w-[350px] h-[350px] rounded-full bg-teal/8 blur-[100px]" />
+        <div className="absolute top-1/2 left-1/3 h-[600px] w-[600px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-violet/10 blur-[120px]" />
+        <div className="absolute top-1/3 right-1/4 h-[350px] w-[350px] rounded-full bg-teal/10 blur-[100px]" />
       </div>
 
-      {/* Grid */}
       <div
         className="pointer-events-none absolute inset-0 opacity-100"
         style={{
-          backgroundImage: 'linear-gradient(rgba(123,92,245,0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(123,92,245,0.05) 1px, transparent 1px)',
+          backgroundImage:
+            'linear-gradient(rgba(123,92,245,0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(123,92,245,0.05) 1px, transparent 1px)',
           backgroundSize: '64px 64px',
           maskImage: 'radial-gradient(ellipse 80% 70% at 50% 50%, black 30%, transparent 100%)',
         }}
         aria-hidden
       />
 
-      <div className="relative z-10 w-full max-w-7xl mx-auto grid md:grid-cols-2 gap-12 items-center">
-        {/* LEFT — text */}
+      <div className="relative z-10 mx-auto grid w-full max-w-7xl items-center gap-12 md:grid-cols-2">
         <motion.div
           variants={containerVariants}
           initial="hidden"
           animate="show"
           className="flex flex-col"
         >
-          {/* Badge */}
           <motion.div variants={itemVariants} className="mb-7">
-            <span className="inline-flex items-center gap-2.5 bg-violet/8 border border-violet/25 rounded-full px-4 py-2 font-mono text-[0.68rem] tracking-widest uppercase text-violet">
-              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse-soft" />
-              AI Voice Assistant · v1.0
+            <span className="inline-flex items-center gap-2.5 rounded-full border border-violet/25 bg-violet/8 px-4 py-2 font-mono text-[0.68rem] uppercase tracking-widest text-violet">
+              <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse-soft" />
+              AI Voice Assistant / v1.0
             </span>
           </motion.div>
 
-          {/* Heading with flip text */}
           <motion.h1
             variants={itemVariants}
-            className="font-display font-extrabold leading-[1.03] tracking-tight mb-6"
-            style={{ fontSize: 'clamp(3rem, 6.5vw, 5.5rem)', color:'white' }}
+            className="mb-6 font-display text-primary font-extrabold leading-[1.03] tracking-tight"
+            style={{ fontSize: 'clamp(3rem, 6.5vw, 5.5rem)' }}
           >
             Speak.&nbsp;
-            <span className="text-white">
+            <span className="text-primary">
               <FlipText
                 words={['Think.', 'Learn.', 'Reply.', 'Grow.']}
                 className="text-gradient-violet"
               />
             </span>
             <br />
-            <span className="text-white">Repeat.</span>
+            <span className="text-primary">Repeat.</span>
           </motion.h1>
 
-          {/* Sub */}
           <motion.p
             variants={itemVariants}
-            className="font-mono text-[0.82rem] text-subtle leading-[1.9] max-w-[480px] mb-9"
+            className="mb-9 max-w-[480px] font-mono text-[0.82rem] leading-[1.9] text-subtle"
           >
-            A seamless voice-first experience — your words converted to
-            text, processed by AI, and spoken back in natural speech.
-            Hands-free. Instant. Intelligent.
+            A seamless voice-first experience. Your words are converted to text,
+            processed by AI, and spoken back in natural speech. Hands-free.
+            Instant. Intelligent.
           </motion.p>
 
-          {/* CTAs */}
-          <motion.div variants={itemVariants} className="flex flex-wrap gap-3 mb-10">
+          <motion.div variants={itemVariants} className="mb-10 flex flex-wrap gap-3">
             <button
               onClick={onOpenApp}
               data-cursor="true"
-              className="inline-flex items-center gap-2 bg-violet text-white font-mono font-bold text-[0.78rem] tracking-widest uppercase px-6 py-3 rounded-lg hover:bg-violet-light hover:shadow-glow-violet transition-all duration-200 cursor-pointer border-0"
+              className="inline-flex cursor-pointer items-center gap-2 rounded-lg border-0 bg-violet px-6 py-3 font-mono text-[0.78rem] font-bold uppercase tracking-widest text-white transition-all duration-200 hover:bg-violet-light hover:shadow-glow-violet"
             >
               Open App <ArrowRight size={15} />
             </button>
             <a
               href="#how-it-works"
               data-cursor="true"
-              className="inline-flex items-center gap-2 bg-transparent text-subtle font-mono text-[0.78rem] tracking-widest uppercase px-6 py-3 rounded-lg border border-border-bright hover:text-primary hover:border-violet/50 transition-all duration-200"
+              className="inline-flex items-center gap-2 rounded-lg border border-border-bright bg-transparent px-6 py-3 font-mono text-[0.78rem] uppercase tracking-widest text-subtle transition-all duration-200 hover:border-violet/50 hover:text-primary"
             >
               How It Works
             </a>
           </motion.div>
 
-          {/* Stats */}
-          <motion.div variants={itemVariants} className="flex gap-3 flex-wrap">
-            {STATS.map(s => (
-              <div key={s.label} className="flex flex-col bg-card border border-border rounded-xl px-5 py-3 min-w-[90px]">
-                <span className="font-display font-extrabold text-2xl text-violet-light leading-none mb-1">{s.num}</span>
-                <span className="font-mono text-[0.62rem] tracking-widest uppercase text-muted">{s.label}</span>
+          <motion.div variants={itemVariants} className="flex flex-wrap gap-3">
+            {STATS.map((stat) => (
+              <div key={stat.label} className="flex min-w-[90px] flex-col rounded-xl border border-border bg-card px-5 py-3 shadow-card">
+                <span className="mb-1 font-display text-2xl font-extrabold leading-none text-violet-light">{stat.num}</span>
+                <span className="font-mono text-[0.62rem] uppercase tracking-widest text-muted">{stat.label}</span>
               </div>
             ))}
           </motion.div>
         </motion.div>
 
-        {/* RIGHT — Orb */}
         <motion.div
           initial={{ opacity: 0, scale: 0.85 }}
           animate={{ opacity: 1, scale: 1 }}
@@ -123,10 +114,9 @@ export default function Hero({ onOpenApp }: { onOpenApp: () => void }) {
         </motion.div>
       </div>
 
-      {/* Scroll indicator */}
-      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2" aria-hidden>
-        <div className="w-px h-14 bg-gradient-to-b from-violet to-transparent animate-scroll-drop origin-top" />
-        <span className="font-mono text-[0.58rem] tracking-[0.25em] uppercase text-muted">Scroll</span>
+      <div className="absolute bottom-8 left-1/2 flex -translate-x-1/2 flex-col items-center gap-2" aria-hidden>
+        <div className="h-14 w-px origin-top animate-scroll-drop bg-gradient-to-b from-violet to-transparent" />
+        <span className="font-mono text-[0.58rem] uppercase tracking-[0.25em] text-muted">Scroll</span>
       </div>
     </section>
   )

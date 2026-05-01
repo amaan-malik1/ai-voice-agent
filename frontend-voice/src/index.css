@@ -2,22 +2,98 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  color-scheme: dark;
+  --color-canvas: 9 9 15;
+  --color-surface: 17 17 32;
+  --color-card: 22 22 42;
+  --color-border: 42 42 69;
+  --color-border-bright: 74 74 112;
+  --color-violet: 123 92 245;
+  --color-violet-light: 157 133 248;
+  --color-amber: 245 166 35;
+  --color-amber-light: 248 192 96;
+  --color-teal: 34 211 238;
+  --color-muted: 107 107 144;
+  --color-subtle: 146 146 181;
+  --color-primary: 232 230 255;
+  --shadow-glow-violet: 0 0 30px rgba(123, 92, 245, 0.3);
+  --shadow-glow-amber: 0 0 30px rgba(245, 166, 35, 0.25);
+  --shadow-card: 0 28px 64px rgba(0, 0, 0, 0.42);
+  --noise-opacity: 0.3;
+}
+
+[data-theme='light'] {
+  color-scheme: light;
+  --color-canvas: 245 247 252;
+  --color-surface: 255 255 255;
+  --color-card: 237 242 255;
+  --color-border: 208 217 235;
+  --color-border-bright: 166 179 208;
+  --color-violet: 109 84 240;
+  --color-violet-light: 139 116 248;
+  --color-amber: 217 135 20;
+  --color-amber-light: 235 170 72;
+  --color-teal: 14 165 233;
+  --color-muted: 111 122 150;
+  --color-subtle: 67 78 108;
+  --color-primary: 15 23 42;
+  --shadow-glow-violet: 0 0 34px rgba(109, 84, 240, 0.18);
+  --shadow-glow-amber: 0 0 34px rgba(217, 135, 20, 0.16);
+  --shadow-card: 0 24px 56px rgba(49, 63, 94, 0.12);
+  --noise-opacity: 0.14;
+}
+
+@layer base {
+  html {
+    background-color: rgb(var(--color-canvas));
+    color: rgb(var(--color-primary));
+  }
+
+  body {
+    background-color: rgb(var(--color-canvas));
+    color: rgb(var(--color-primary));
+    transition: background-color 220ms ease, color 220ms ease;
+  }
+
+  #root {
+    min-height: 100vh;
+  }
+
+  ::selection {
+    background: rgb(var(--color-violet) / 0.18);
+    color: rgb(var(--color-primary));
+  }
+}
+
 @layer utilities {
+  .theme-transition {
+    transition:
+      background-color 220ms ease,
+      color 220ms ease,
+      border-color 220ms ease,
+      box-shadow 220ms ease,
+      opacity 220ms ease;
+  }
+
   .text-gradient-violet {
     background: linear-gradient(135deg, #7B5CF5, #22D3EE);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
   }
+
   .text-gradient-warm {
     background: linear-gradient(135deg, #7B5CF5, #F5A623);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
   }
+
   .border-glow-violet {
-    box-shadow: 0 0 0 1px rgba(123,92,245,0.4), 0 0 20px rgba(123,92,245,0.15);
+    box-shadow: 0 0 0 1px rgba(123, 92, 245, 0.4), 0 0 20px rgba(123, 92, 245, 0.15);
   }
+
   .bg-noise {
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
   }

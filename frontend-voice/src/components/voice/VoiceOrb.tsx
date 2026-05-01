@@ -1,6 +1,7 @@
 import { useRef } from 'react'
 import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion'
-import { Mic, Square, Loader2, Volume2 } from 'lucide-react'
+import { Loader2, Mic, Square, Volume2 } from 'lucide-react'
+import { cn } from '../../lib/utils'
 import type { RecordingState } from '../../types'
 
 interface Props {
@@ -11,15 +12,36 @@ interface Props {
 }
 
 const CFG: Record<RecordingState, { label: string; icon: typeof Mic; spin: number }> = {
-  idle:       { label: 'Tap to speak',          icon: Mic,     spin: 9   },
-  recording:  { label: 'Listening… tap to stop', icon: Square,  spin: 2   },
-  processing: { label: 'Processing…',            icon: Loader2, spin: 1.2 },
-  speaking:   { label: 'Speaking…',              icon: Volume2, spin: 5   },
+  idle: { label: 'Tap to speak', icon: Mic, spin: 9 },
+  recording: { label: 'Listening... tap to stop', icon: Square, spin: 2 },
+  processing: { label: 'Processing...', icon: Loader2, spin: 1.2 },
+  speaking: { label: 'Speaking...', icon: Volume2, spin: 5 },
+}
+
+const RING_GRADIENT: Record<RecordingState, string> = {
+  idle: 'from-violet via-violet-light to-teal',
+  recording: 'from-red-500 via-rose-400 to-red-600',
+  processing: 'from-amber via-amber-light to-violet-light',
+  speaking: 'from-teal via-violet-light to-emerald-400',
+}
+
+const HALO_COLOR: Record<RecordingState, string> = {
+  idle: 'bg-violet/25',
+  recording: 'bg-red-500/25',
+  processing: 'bg-amber/25',
+  speaking: 'bg-teal/25',
+}
+
+const ICON_COLOR: Record<RecordingState, string> = {
+  idle: 'text-violet',
+  recording: 'text-red-400',
+  processing: 'text-amber',
+  speaking: 'text-teal',
 }
 
 export default function VoiceOrb({ state, audioLevel = 0, onStart, onStop }: Props) {
-  const ref  = useRef<HTMLDivElement>(null)
-  const cfg  = CFG[state]
+  const ref = useRef<HTMLDivElement>(null)
+  const cfg = CFG[state]
   const Icon = cfg.icon
 
   const mx = useMotionValue(0)
@@ -27,34 +49,43 @@ export default function VoiceOrb({ state, audioLevel = 0, onStart, onStop }: Pro
   const rx = useSpring(useTransform(my, [-150, 150], [14, -14]), { stiffness: 180, damping: 26 })
   const ry = useSpring(useTransform(mx, [-150, 150], [-14, 14]), { stiffness: 180, damping: 26 })
 
-  const onMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    const r = ref.current?.getBoundingClientRect()
-    if (!r) return
-    mx.set(e.clientX - r.left - r.width / 2)
-    my.set(e.clientY - r.top  - r.height / 2)
+  const onMove = (event: React.MouseEvent<HTMLDivElement>) => {
+    const rect = ref.current?.getBoundingClientRect()
+    if (!rect) return
+    mx.set(event.clientX - rect.left - rect.width / 2)
+    my.set(event.clientY - rect.top - rect.height / 2)
   }
-  const onLeave = () => { mx.set(0); my.set(0) }
-  const onClick  = () => { if (state === 'idle') onStart(); else if (state === 'recording') onStop() }
+
+  const onLeave = () => {
+    mx.set(0)
+    my.set(0)
+  }
+
+  const onClick = () => {
+    if (state === 'idle') onStart()
+    else if (state === 'recording') onStop()
+  }
 
   const scale = state === 'recording' ? 1 + (audioLevel / 100) * 0.07 : 1
 
   return (
-    <div className="flex flex-col items-center gap-6 select-none">
+    <div className="flex select-none flex-col items-center gap-6">
       <div ref={ref} onMouseMove={onMove} onMouseLeave={onLeave} className="relative" style={{ perspective: '900px' }}>
-
-        {/* Ripple rings — white only */}
-        {[0,1,2,3].map(i => (
-          <div key={i} className="absolute rounded-full border border-white/10 pointer-events-none"
+        {[0, 1, 2, 3].map((index) => (
+          <div
+            key={index}
+            className={cn('pointer-events-none absolute rounded-full border border-border', state === 'recording' && 'border-violet/25')}
             style={{
-              inset: `${-(i+1)*20}px`,
-              animationName: 'ripple', animationDuration: '4s',
-              animationDelay: `${i}s`, animationTimingFunction: 'ease-out',
+              inset: `${-(index + 1) * 20}px`,
+              animationName: 'ripple',
+              animationDuration: '4s',
+              animationDelay: `${index}s`,
+              animationTimingFunction: 'ease-out',
               animationIterationCount: 'infinite',
             }}
           />
         ))}
 
-        {/* 3D Orb */}
         <motion.div
           style={{ rotateX: rx, rotateY: ry }}
           animate={{ scale }}
@@ -62,36 +93,32 @@ export default function VoiceOrb({ state, audioLevel = 0, onStart, onStop }: Pro
           onClick={onClick}
           role="button"
           tabIndex={0}
-          onKeyDown={e => e.key === 'Enter' && onClick()}
+          onKeyDown={(event) => event.key === 'Enter' && onClick()}
           aria-label={cfg.label}
-          className="relative w-48 h-48 flex items-center justify-center cursor-pointer"
+          className="relative flex h-48 w-48 cursor-pointer items-center justify-center"
         >
-          {/* Spinning ring — white/gray gradient */}
           <motion.div
             animate={{ rotate: 360 }}
             transition={{ repeat: Infinity, duration: cfg.spin, ease: 'linear' }}
-            className="absolute inset-0 rounded-full p-[2.5px]"
-            style={{ background: 'conic-gradient(from 0deg, #ffffff, #555555, #ffffff, #333333, #ffffff)' }}
+            className={cn('absolute inset-0 rounded-full bg-gradient-to-br p-[2.5px]', RING_GRADIENT[state])}
           >
-            <div className="w-full h-full rounded-full bg-black" />
+            <div className="h-full w-full rounded-full bg-canvas" />
           </motion.div>
 
-          {/* Glow halo */}
-          <div className="absolute inset-0 rounded-full blur-2xl opacity-20 bg-white" />
+          <div className={cn('absolute inset-1 rounded-full blur-2xl opacity-30', HALO_COLOR[state])} />
 
-          {/* Core */}
-          <div className="absolute inset-4 rounded-full flex items-center justify-center z-10 bg-gradient-to-b from-white/10 to-black/80">
+          <div className="absolute inset-4 z-10 flex items-center justify-center rounded-full border border-border/50 bg-gradient-to-b from-card to-canvas shadow-card">
             <motion.div
               animate={state === 'speaking' ? { scale: [1, 1.1, 1] } : { scale: 1 }}
               transition={{ repeat: Infinity, duration: 1.4, ease: 'easeInOut' }}
             >
               <Icon
                 size={48}
-                className={
-                  state === 'processing' ? 'text-white/60 animate-spin' :
-                  state === 'recording'  ? 'text-white' :
-                  'text-white/80'
-                }
+                className={cn(
+                  'drop-shadow-[0_0_14px_currentColor] transition-colors duration-300',
+                  ICON_COLOR[state],
+                  state === 'processing' && 'animate-spin',
+                )}
                 strokeWidth={1.5}
               />
             </motion.div>
@@ -99,14 +126,19 @@ export default function VoiceOrb({ state, audioLevel = 0, onStart, onStop }: Pro
         </motion.div>
       </div>
 
-      {/* State pill */}
-      <div className="flex items-center gap-2 bg-white/5 border border-white/10 rounded-full px-5 py-2">
+      <div className="flex items-center gap-2 rounded-full border border-border bg-card px-5 py-2 shadow-card theme-transition">
         <motion.span
           animate={{ opacity: [1, 0.25, 1] }}
           transition={{ repeat: Infinity, duration: 1.2 }}
-          className="w-1.5 h-1.5 rounded-full bg-white flex-shrink-0"
+          className={cn(
+            'h-1.5 w-1.5 flex-shrink-0 rounded-full',
+            state === 'idle' && 'bg-muted',
+            state === 'recording' && 'bg-red-400',
+            state === 'processing' && 'bg-amber',
+            state === 'speaking' && 'bg-teal',
+          )}
         />
-        <span className="font-mono text-[0.68rem] tracking-widest text-white/50">{cfg.label}</span>
+        <span className="font-mono text-[0.68rem] tracking-widest text-subtle">{cfg.label}</span>
       </div>
     </div>
   )

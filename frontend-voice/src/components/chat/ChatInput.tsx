@@ -1,6 +1,6 @@
-import { useState, useRef, type KeyboardEvent } from 'react'
+import { useRef, useState, type KeyboardEvent } from 'react'
 import { motion } from 'framer-motion'
-import { Send, Mic, Square } from 'lucide-react'
+import { Mic, Send, Square } from 'lucide-react'
 import { cn } from '../../lib/utils'
 
 interface Props {
@@ -12,20 +12,30 @@ interface Props {
   disabled?: boolean
 }
 
-export default function ChatInput({ onSend, onVoiceStart, onVoiceStop, isRecording = false, isLoading = false, disabled = false }: Props) {
+export default function ChatInput({
+  onSend,
+  onVoiceStart,
+  onVoiceStop,
+  isRecording = false,
+  isLoading = false,
+  disabled = false,
+}: Props) {
   const [text, setText] = useState('')
   const ref = useRef<HTMLTextAreaElement>(null)
 
   const handleSend = () => {
-    const t = text.trim()
-    if (!t || isLoading || disabled) return
-    onSend(t)
+    const trimmed = text.trim()
+    if (!trimmed || isLoading || disabled) return
+    onSend(trimmed)
     setText('')
     if (ref.current) ref.current.style.height = 'auto'
   }
 
-  const onKey = (e: KeyboardEvent<HTMLTextAreaElement>) => {
-    if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleSend() }
+  const onKey = (event: KeyboardEvent<HTMLTextAreaElement>) => {
+    if (event.key === 'Enter' && !event.shiftKey) {
+      event.preventDefault()
+      handleSend()
+    }
   }
 
   const onInput = () => {
@@ -35,42 +45,50 @@ export default function ChatInput({ onSend, onVoiceStart, onVoiceStop, isRecordi
   }
 
   return (
-    <div className="px-4 py-4 border-t border-white/10 bg-black/80 backdrop-blur-sm flex-shrink-0">
-      <div className={cn(
-        'flex items-end gap-3 bg-white/5 border rounded-2xl px-4 py-3 transition-colors',
-        isRecording ? 'border-white/30' : 'border-white/10 focus-within:border-white/25'
-      )}>
+    <div className="flex-shrink-0 border-t border-border bg-surface/85 px-4 py-4 backdrop-blur-sm theme-transition">
+      <div
+        className={cn(
+          'flex items-end gap-3 rounded-2xl border bg-card/80 px-4 py-3 transition-colors',
+          isRecording ? 'border-violet/30' : 'border-border focus-within:border-border-bright',
+        )}
+      >
         <textarea
           ref={ref}
           value={text}
-          onChange={e => setText(e.target.value)}
+          onChange={(event) => setText(event.target.value)}
           onKeyDown={onKey}
           onInput={onInput}
           disabled={disabled || isRecording}
-          placeholder={isRecording ? 'Listening…' : 'Message Weblyrix…'}
+          placeholder={isRecording ? 'Listening...' : 'Message Weblyrix...'}
           rows={1}
-          className="flex-1 bg-transparent font-mono text-[0.78rem] text-white placeholder:text-white/25 outline-none resize-none leading-relaxed min-h-[24px] max-h-40 disabled:opacity-40"
+          className="min-h-[24px] max-h-40 flex-1 resize-none bg-transparent font-mono text-[0.78rem] leading-relaxed text-primary outline-none placeholder:text-muted disabled:opacity-40"
         />
         {(onVoiceStart || onVoiceStop) && (
-          <motion.button whileTap={{ scale: 0.9 }}
+          <motion.button
+            whileTap={{ scale: 0.9 }}
             onClick={isRecording ? onVoiceStop : onVoiceStart}
             disabled={isLoading || disabled}
             className={cn(
-              'flex-shrink-0 w-9 h-9 rounded-xl flex items-center justify-center border transition-all',
-              isRecording ? 'bg-white/10 border-white/30 text-white' : 'bg-white/5 border-white/10 text-white/40 hover:text-white hover:border-white/25'
-            )}>
+              'flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-xl border transition-all',
+              isRecording
+                ? 'border-violet/30 bg-violet/12 text-violet'
+                : 'border-border bg-surface text-muted hover:border-border-bright hover:text-primary',
+            )}
+          >
             {isRecording ? <Square size={13} fill="currentColor" /> : <Mic size={13} />}
           </motion.button>
         )}
-        <motion.button whileTap={{ scale: 0.9 }}
+        <motion.button
+          whileTap={{ scale: 0.9 }}
           onClick={handleSend}
           disabled={!text.trim() || isLoading || disabled || isRecording}
-          className="flex-shrink-0 w-9 h-9 rounded-xl flex items-center justify-center bg-white text-black hover:bg-white/90 transition-all disabled:opacity-25 disabled:cursor-not-allowed">
+          className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-xl bg-violet text-white transition-all hover:bg-violet-light disabled:cursor-not-allowed disabled:opacity-25"
+        >
           <Send size={13} />
         </motion.button>
       </div>
-      <p className="font-mono text-[0.56rem] text-white/20 text-center mt-2">
-        {isRecording ? 'Recording — press Stop when done' : 'Enter to send · Shift+Enter newline · Mic for voice'}
+      <p className="mt-2 text-center font-mono text-[0.56rem] text-muted">
+        {isRecording ? 'Recording / press Stop when done' : 'Enter to send / Shift+Enter newline / Mic for voice'}
       </p>
     </div>
   )
