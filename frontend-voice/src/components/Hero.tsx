@@ -47,8 +47,10 @@ export default function Hero({ onOpenApp }: { onOpenApp: () => void }) {
         >
           <motion.div variants={itemVariants} className="mb-7">
             <span className="inline-flex items-center gap-2.5 rounded-full border border-violet/25 bg-violet/8 px-4 py-2 font-mono text-[0.68rem] uppercase tracking-widest text-violet">
-              <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse-soft" />
-              AI Voice Assistant / v1.0
+              <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse-soft 
+                 shadow-[0_0_6px_2px_rgba(52,211,153,0.7)] 
+                " />
+              AI Voice Assistant
             </span>
           </motion.div>
 

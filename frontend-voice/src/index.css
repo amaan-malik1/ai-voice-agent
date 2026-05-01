@@ -77,14 +77,14 @@
   }
 
   .text-gradient-violet {
-    background: linear-gradient(135deg, #7B5CF5, #22D3EE);
+    background: linear-gradient(135deg, #ac44f7, #6b309c);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
   }
 
   .text-gradient-warm {
-    background: linear-gradient(135deg, #7B5CF5, #F5A623);
+    background: linear-gradient(135deg, #e5e36b, #eea93a);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
