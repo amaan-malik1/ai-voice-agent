@@ -28,89 +28,105 @@ export default function Navbar({ onOpenApp, theme, onToggleTheme }: Props) {
   }, [])
 
   return (
-    <motion.header
-      initial={{ y: -80, opacity: 0 }}
-      animate={{ y: 0, opacity: 1 }}
-      transition={{ duration: 0.6, ease: 'easeOut' }}
-      className={cn(
-        'fixed top-0 left-0 right-0 z-[100] flex items-center justify-between px-6 py-4 transition-all duration-500 md:px-12',
-        scrolled && 'border-b border-border bg-canvas/80 backdrop-blur-2xl',
-      )}
-    >
-      <a href="#" className="flex items-center gap-2.5" data-cursor="true">
-        <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-violet font-mono text-sm font-bold text-white shadow-glow-violet">
-          W
-        </div>
-        <span className="font-display text-sm font-bold uppercase tracking-[0.18em] text-primary">
-          Weblyrix
-        </span>
-      </a>
-
-      <nav className="hidden items-center gap-8 md:flex">
-        {NAV_ITEMS.map((item) => (
-          <a
-            key={item.href}
-            href={item.href}
-            className="group relative font-mono text-[0.72rem] uppercase tracking-widest text-muted transition-colors hover:text-primary"
-          >
-            {item.label}
-            <span className="absolute -bottom-1 left-0 h-px w-0 bg-violet transition-all duration-300 group-hover:w-full" />
+    <>
+      {/* Floating Nav */}
+      <motion.header
+        initial={{ y: -100, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 0.4 }}
+        className="fixed top-6 inset-x-0 z-[5000] flex justify-center"
+      >
+        <div
+          className={cn(
+            "flex w-[80%] max-w-[1200px] items-center justify-between gap-3 rounded-full border px-4 py-2 shadow-lg backdrop-blur-md transition-all duration-300",
+            "bg-white/80 border-black/10 shadow-black/10",
+            "dark:bg-black/50 dark:border-white/10 dark:shadow-white/10"
+          )}
+        >
+          {/* Logo */}
+          <a href="#" className="flex items-center gap-2">
+            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-violet text-white text-sm font-bold">
+              W
+            </div>
+            <span className="hidden sm:block font-semibold text-sm text-neutral-800 dark:text-white">
+              Weblyrix
+            </span>
           </a>
-        ))}
-      </nav>
 
-      <div className="hidden items-center gap-3 md:flex">
-        <ThemeToggle theme={theme} onToggleTheme={onToggleTheme} />
-        <button
-          onClick={onOpenApp}
-          className="inline-flex items-center gap-2 rounded-md border border-violet/40 px-5 py-2 font-mono text-[0.72rem] uppercase tracking-widest text-violet transition-all duration-250 hover:bg-violet hover:text-white hover:shadow-glow-violet"
-        >
-          Open App
-        </button>
-      </div>
-
-      <div className="flex items-center gap-2 md:hidden">
-        <ThemeToggle theme={theme} onToggleTheme={onToggleTheme} compact />
-        <button
-          type="button"
-          className="text-muted transition-colors hover:text-primary"
-          onClick={() => setOpen((value) => !value)}
-        >
-          {open ? <X size={20} /> : <Menu size={20} />}
-        </button>
-      </div>
-
-      <AnimatePresence>
-        {open && (
-          <motion.div
-            initial={{ opacity: 0, y: -12 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -12 }}
-            className="absolute left-0 right-0 top-full flex flex-col gap-5 border-b border-border bg-surface px-6 py-6 md:hidden"
-          >
+          {/* Nav Items (centered) */}
+          <div className="hidden md:flex flex-1 justify-center items-center gap-1">
             {NAV_ITEMS.map((item) => (
               <a
                 key={item.href}
                 href={item.href}
-                onClick={() => setOpen(false)}
-                className="font-mono text-sm uppercase tracking-widest text-muted hover:text-primary"
+                className="rounded-full px-4 py-2 text-sm text-neutral-600 hover:bg-neutral-100 hover:text-neutral-900 transition dark:text-neutral-300 dark:hover:bg-white/10 dark:hover:text-white"
               >
                 {item.label}
               </a>
             ))}
-            <ThemeToggle theme={theme} onToggleTheme={onToggleTheme} className="justify-start" />
+          </div>
+
+          {/* Actions */}
+          <div className="hidden md:flex items-center gap-2">
+            <ThemeToggle theme={theme} onToggleTheme={onToggleTheme} />
             <button
-              onClick={() => {
-                setOpen(false)
-                onOpenApp()
-              }}
-              className="rounded-md border border-violet/40 px-4 py-2 text-center font-mono text-sm uppercase tracking-widest text-violet"
+              onClick={onOpenApp}
+              className="rounded-full bg-neutral-900 px-4 py-2 text-sm text-white hover:bg-neutral-800 transition dark:bg-white dark:text-black"
             >
               Open App
             </button>
+          </div>
+
+          {/* Mobile */}
+          <div className="flex items-center gap-2 md:hidden">
+            <ThemeToggle theme={theme} onToggleTheme={onToggleTheme} />
+            <button onClick={() => setOpen((v) => !v)}>
+              {open ? <X size={18} /> : <Menu size={18} />}
+            </button>
+          </div>
+        </div>
+      </motion.header>
+
+      {/* Mobile Dropdown */}
+      <AnimatePresence>
+        {open && (
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 10 }}
+            exit={{ opacity: 0, y: -10 }}
+            className="fixed top-20 inset-x-4 z-[4000] rounded-2xl border bg-white/90 backdrop-blur-xl p-5 shadow-lg dark:bg-black/80 dark:border-white/10"
+          >
+            <div className="flex flex-col gap-4">
+              {NAV_ITEMS.map((item) => (
+                <a
+                  key={item.href}
+                  href={item.href}
+                  onClick={() => setOpen(false)}
+                  className="text-sm text-neutral-700 dark:text-neutral-300"
+                >
+                  {item.label}
+                </a>
+              ))}
+
+              <ThemeToggle
+                theme={theme}
+                onToggleTheme={onToggleTheme}
+                className="justify-start"
+              />
+
+              <button
+                onClick={() => {
+                  setOpen(false)
+                  onOpenApp()
+                }}
+                className="rounded-full bg-neutral-900 px-4 py-2 text-sm text-white dark:bg-white dark:text-black"
+              >
+                Open App
+              </button>
+            </div>
           </motion.div>
         )}
       </AnimatePresence>
-    </motion.header>
+    </>
   )
 }

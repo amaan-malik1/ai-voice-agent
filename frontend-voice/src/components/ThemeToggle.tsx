@@ -1,3 +1,4 @@
+import { motion } from 'framer-motion'
 import { Moon, Sun } from 'lucide-react'
 import type { Theme } from '../hooks/useTheme'
 import { cn } from '../lib/utils'
@@ -9,25 +10,33 @@ interface Props {
   compact?: boolean
 }
 
-export default function ThemeToggle({ theme, onToggleTheme, className, compact = false }: Props) {
+export default function ThemeToggle({ theme, onToggleTheme, className }: Props) {
   const isDark = theme === 'dark'
-  const Icon = isDark ? Sun : Moon
-  const label = isDark ? 'Light mode' : 'Dark mode'
 
   return (
     <button
-      type="button"
       onClick={onToggleTheme}
-      title={label}
-      aria-label={`Switch to ${label.toLowerCase()}`}
       className={cn(
-        'inline-flex items-center justify-center gap-2 rounded-md border border-border bg-surface/85 px-3 py-2 font-mono text-[0.68rem] uppercase tracking-widest text-subtle backdrop-blur-sm transition-all hover:border-border-bright hover:text-primary',
-        compact && 'w-10 px-0',
-        className,
+        "relative flex h-8 w-16 items-center rounded-full px-1 transition-colors",
+        "bg-neutral-200 dark:bg-neutral-700",
+        className
       )}
     >
-      <Icon size={14} />
-      {!compact && <span>{label}</span>}
+      {/* Sliding circle */}
+      <motion.div
+        layout
+        transition={{ type: 'spring', stiffness: 500, damping: 30 }}
+        className="absolute top-1 left-1 h-6 w-6 rounded-full bg-white shadow-md flex items-center justify-center"
+        animate={{ x: isDark ? 32 : 0 }}
+      >
+        {isDark ? <Moon size={12} /> : <Sun size={12} />}
+      </motion.div>
+
+      {/* Icons background (optional subtle hint) */}
+      <div className="flex w-full justify-between px-2 text-xs opacity-60">
+        <Sun size={12} />
+        <Moon size={12} />
+      </div>
     </button>
   )
 }

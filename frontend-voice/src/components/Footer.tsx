@@ -1,19 +1,19 @@
 const LINKS = {
   Product: [
     { label: 'How It Works', href: '#how-it-works' },
-    { label: 'Live Demo',    href: '#demo' },
-    { label: 'Features',     href: '#features' },
+    { label: 'Live Demo', href: '#demo' },
+    { label: 'Features', href: '#features' },
   ],
-  'Powered By': [
-    { label: 'OpenAI Whisper', href: '#' },
-    { label: 'LLaMA 3 / GPT', href: '#' },
-    { label: 'ElevenLabs TTS',href: '#' },
+  'Support Links': [
+    { label: 'Privacy Policy', href: '#' },
+    { label: 'Terms of Us', href: '#' },
   ],
-  Stack: [
-    { label: 'React 18 + TypeScript', href: '#' },
-    { label: 'Node.js / FastAPI',     href: '#' },
-    { label: 'Framer Motion + GSAP',  href: '#' },
-  ],
+
+  'Other Links': [
+    { label: 'About Us', href: '#' },
+    { label: 'Career', href: '#' },
+    { label: 'Contact Us', href: '#' },
+  ]
 }
 
 export default function Footer() {

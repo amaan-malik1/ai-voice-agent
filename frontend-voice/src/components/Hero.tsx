@@ -13,11 +13,11 @@ const itemVariants: Variants = {
   show: { opacity: 1, y: 0, transition: { duration: 0.75, ease: 'easeOut' } },
 }
 
-const STATS = [
-  { num: '99+', label: 'Languages' },
-  { num: '<1s', label: 'Response' },
-  { num: 'Full', label: 'Context' },
-]
+// const STATS = [
+//   { num: '99+', label: 'Languages' },
+//   { num: '<1s', label: 'Response' },
+//   { num: 'Full', label: 'Context' },
+// ]
 
 export default function Hero({ onOpenApp }: { onOpenApp: () => void }) {
   return (
@@ -94,14 +94,14 @@ export default function Hero({ onOpenApp }: { onOpenApp: () => void }) {
             </a>
           </motion.div>
 
-          <motion.div variants={itemVariants} className="flex flex-wrap gap-3">
+          {/* <motion.div variants={itemVariants} className="flex flex-wrap gap-3">
             {STATS.map((stat) => (
               <div key={stat.label} className="flex min-w-[90px] flex-col rounded-xl border border-border bg-card px-5 py-3 shadow-card">
                 <span className="mb-1 font-display text-2xl font-extrabold leading-none text-violet-light">{stat.num}</span>
                 <span className="font-mono text-[0.62rem] uppercase tracking-widest text-muted">{stat.label}</span>
               </div>
             ))}
-          </motion.div>
+          </motion.div> */}
         </motion.div>
 
         <motion.div
