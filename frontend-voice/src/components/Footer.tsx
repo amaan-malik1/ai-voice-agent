@@ -54,12 +54,9 @@ export default function Footer() {
           ))}
         </div>
 
-        <div className="pt-6 border-t border-border flex flex-col md:flex-row justify-between items-center gap-3">
-          <span className="font-mono text-[0.62rem] text-muted">
+        <div className="pt-6 border-t border-border flex flex-col md:flex-row justify-center items-center gap-3">
+          <span className="text-center font-mono text-[0.62rem] text-muted">
             © {new Date().getFullYear()} Weblyrix Digital Solutions. All rights reserved.
-          </span>
-          <span className="font-mono text-[0.62rem] text-muted">
-            Prepared · April 2026
           </span>
         </div>
       </div>
