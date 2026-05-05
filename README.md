@@ -9,24 +9,25 @@
 ## Quick Start
 
 ### 1. Install everything
+
 ```bash
 npm install && cd client && npm install && cd ../server && npm install
 ```
 
 ### 2. Configure environment variables
+
 ```bash
 # Server
 cd server
 cp .env.example .env
-# → Fill in OPENAI_API_KEY and ELEVENLABS_API_KEY
 
 # Client
 cd ../client
 cp .env.example .env
-# → VITE_API_URL=http://localhost:5000
 ```
 
 ### 3. Run both dev servers
+
 ```bash
 # From root (requires concurrently)
 npm install && npm run dev
@@ -41,6 +42,7 @@ cd server && npm run dev   # → http://localhost:5000
 ## Features
 
 ### Frontend (React + TypeScript + Tailwind + Framer Motion)
+
 - **Sidebar** — ChatGPT-style with full conversation history (localStorage via Zustand persist)
 - **Chat Page** — Message bubbles, typing indicator, copy button, suggestion chips
 - **Voice Page** — Perplexity-style: 3D orb + waveform visualizer + transcript panel
@@ -49,16 +51,16 @@ cd server && npm run dev   # → http://localhost:5000
 - **Custom cursor** — Framer Motion magnetic cursor
 
 ### Backend (Node.js + Express + TypeScript)
-| Route | Method | Description |
-|-------|--------|-------------|
-| `/api/health` | GET | Health check + API key status |
-| `/api/transcribe` | POST | Audio → Whisper STT → text |
-| `/api/chat` | POST | Messages → GPT → reply |
-| `/api/tts` | POST | Text → ElevenLabs → audio URL |
-| `/api/audio/:file` | GET | Serve TTS audio file |
+
+| Route              | Method | Description                   |
+| ------------------ | ------ | ----------------------------- |
+| `/api/health`      | GET    | Health check + API key status |
+| `/api/transcribe`  | POST   | Audio → Whisper STT → text    |
+| `/api/chat`        | POST   | Messages → GPT → reply        |
+| `/api/tts`         | POST   | Text → ElevenLabs → audio URL |
+| `/api/audio/:file` | GET    | Serve TTS audio file          |
 
 ---
-
 ## Project Structure
 
 ```
@@ -85,19 +87,6 @@ weblyrix-fullstack/
 │   │   └── types/index.ts
 │   └── .env.example
 │
-├── server/                        # Express backend
-│   ├── src/
-│   │   ├── controllers/
-│   │   │   ├── transcribeController.ts  # Whisper STT
-│   │   │   ├── chatController.ts        # GPT chat
-│   │   │   └── ttsController.ts         # ElevenLabs TTS
-│   │   ├── services/
-│   │   │   ├── openaiService.ts         # OpenAI SDK wrapper
-│   │   │   └── ttsService.ts            # ElevenLabs API
-│   │   ├── routes/index.ts              # All API routes
-│   │   ├── middleware/errorHandler.ts   # Global error handler
-│   │   └── index.ts                     # App entry
-│   └── .env.example
 │
 └── README.md
 ```
@@ -106,9 +95,8 @@ weblyrix-fullstack/
 
 ## API Keys
 
-| Service | Purpose | Get Key |
-|---------|---------|---------|
-| OpenAI | Whisper STT + GPT | https://platform.openai.com/api-keys |
-| ElevenLabs | Text-to-Speech | https://elevenlabs.io |
+| Service    | Purpose           | Get Key                              |
+| ---------- | ----------------- | ------------------------------------ |
+| OpenAI     | Whisper STT + GPT | https://platform.openai.com/api-keys |
+| ElevenLabs | Text-to-Speech    | https://elevenlabs.io                |
 
-**Demo mode**: Without API keys, the app works in demo mode with simulated responses.
