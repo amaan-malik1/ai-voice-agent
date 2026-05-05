@@ -38,9 +38,17 @@ export default function Navbar({ onOpenApp, theme, onToggleTheme }: Props) {
       >
         <div
           className={cn(
-            "flex w-[80%] max-w-[1200px] items-center justify-between gap-3 rounded-full border px-4 py-2 shadow-lg backdrop-blur-md transition-all duration-300",
-            "bg-white/80 border-black/10 shadow-black/10",
-            "dark:bg-black/50 dark:border-white/10 dark:shadow-white/10"
+            "flex w-[80%] max-w-[1200px] items-center justify-between gap-3 rounded-full px-4 py-2 transition-all duration-300",
+
+            // ✨ LIGHT MODE
+            scrolled
+              ? "bg-white/90 backdrop-blur-xl shadow-[0_10px_40px_rgba(0,0,0,0.12)] border border-black/10"
+              : "bg-white/70 backdrop-blur-md shadow-[0_5px_20px_rgba(0,0,0,0.06)] border border-black/5",
+
+            // 🌙 DARK MODE
+            scrolled
+              ? "dark:bg-black/70 dark:shadow-[0_10px_40px_rgba(0,0,0,0.5)] dark:border-white/10"
+              : "dark:bg-black/40 dark:shadow-[0_5px_20px_rgba(0,0,0,0.3)] dark:border-white/5"
           )}
         >
           {/* Logo */}
@@ -53,7 +61,7 @@ export default function Navbar({ onOpenApp, theme, onToggleTheme }: Props) {
             </span>
           </a>
 
-          {/* Nav Items (centered) */}
+          {/* Nav Items */}
           <div className="hidden md:flex flex-1 justify-center items-center gap-1">
             {NAV_ITEMS.map((item) => (
               <a

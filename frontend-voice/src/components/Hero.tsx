@@ -13,12 +13,6 @@ const itemVariants: Variants = {
   show: { opacity: 1, y: 0, transition: { duration: 0.75, ease: 'easeOut' } },
 }
 
-// const STATS = [
-//   { num: '99+', label: 'Languages' },
-//   { num: '<1s', label: 'Response' },
-//   { num: 'Full', label: 'Context' },
-// ]
-
 export default function Hero({ onOpenApp }: { onOpenApp: () => void }) {
   return (
     <section id="hero" className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden px-6 pt-24 md:px-12">
