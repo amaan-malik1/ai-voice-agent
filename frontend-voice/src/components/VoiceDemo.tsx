@@ -114,7 +114,6 @@ export default function VoiceDemo() {
               </div>
               <button
                 onClick={() => setMessages([])}
-                data-cursor="true"
                 className="text-muted transition-colors hover:text-subtle"
                 aria-label="Clear conversation"
               >
@@ -179,7 +178,7 @@ export default function VoiceDemo() {
               <button
                 onClick={handleSend}
                 disabled={state !== 'idle' || !inputText.trim()}
-                data-cursor="true"
+           
                 className="rounded-xl bg-violet px-4 py-2.5 text-white transition-all duration-200 hover:bg-violet-light hover:shadow-glow-violet disabled:cursor-not-allowed disabled:opacity-35"
               >
                 <Send size={16} />

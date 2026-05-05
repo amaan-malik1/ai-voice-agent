@@ -51,7 +51,6 @@ export default function Navbar({ onOpenApp, theme, onToggleTheme }: Props) {
           <a
             key={item.href}
             href={item.href}
-            data-cursor="true"
             className="group relative font-mono text-[0.72rem] uppercase tracking-widest text-muted transition-colors hover:text-primary"
           >
             {item.label}
@@ -64,7 +63,6 @@ export default function Navbar({ onOpenApp, theme, onToggleTheme }: Props) {
         <ThemeToggle theme={theme} onToggleTheme={onToggleTheme} />
         <button
           onClick={onOpenApp}
-          data-cursor="true"
           className="inline-flex items-center gap-2 rounded-md border border-violet/40 px-5 py-2 font-mono text-[0.72rem] uppercase tracking-widest text-violet transition-all duration-250 hover:bg-violet hover:text-white hover:shadow-glow-violet"
         >
           Open App

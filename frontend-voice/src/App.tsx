@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react'
-import Cursor from './components/Cursor'
 import Navbar from './components/Navbar'
 import Hero from './components/Hero'
 import Marquee from './components/Marquee'
@@ -34,7 +33,6 @@ export default function App() {
   if (view === 'app') {
     return (
       <div className="h-screen w-screen overflow-hidden bg-canvas text-primary theme-transition">
-        <Cursor />
         <div className="fixed top-4 left-1/2 z-[220] flex -translate-x-1/2 items-center gap-2">
           <button
             onClick={() => setView('landing')}
@@ -68,7 +66,6 @@ export default function App() {
         }}
         aria-hidden
       />
-      <Cursor />
       <Navbar
         onOpenApp={() => setView('app')}
         theme={theme}

@@ -82,14 +82,12 @@ export default function Hero({ onOpenApp }: { onOpenApp: () => void }) {
           <motion.div variants={itemVariants} className="mb-10 flex flex-wrap gap-3">
             <button
               onClick={onOpenApp}
-              data-cursor="true"
-              className="inline-flex cursor-pointer items-center gap-2 rounded-lg border-0 bg-violet px-6 py-3 font-mono text-[0.78rem] font-bold uppercase tracking-widest text-white transition-all duration-200 hover:bg-violet-light hover:shadow-glow-violet"
+              className="inline-flex items-center gap-2 rounded-lg border-0 bg-violet px-6 py-3 font-mono text-[0.78rem] font-bold uppercase tracking-widest text-white transition-all duration-200 hover:bg-violet-light hover:shadow-glow-violet"
             >
               Open App <ArrowRight size={15} />
             </button>
             <a
               href="#how-it-works"
-              data-cursor="true"
               className="inline-flex items-center gap-2 rounded-lg border border-border-bright bg-transparent px-6 py-3 font-mono text-[0.78rem] uppercase tracking-widest text-subtle transition-all duration-200 hover:border-violet/50 hover:text-primary"
             >
               How It Works

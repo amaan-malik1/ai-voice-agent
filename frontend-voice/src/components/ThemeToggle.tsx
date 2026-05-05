@@ -18,7 +18,6 @@ export default function ThemeToggle({ theme, onToggleTheme, className, compact =
     <button
       type="button"
       onClick={onToggleTheme}
-      data-cursor="true"
       title={label}
       aria-label={`Switch to ${label.toLowerCase()}`}
       className={cn(

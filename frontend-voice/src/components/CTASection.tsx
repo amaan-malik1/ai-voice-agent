@@ -25,7 +25,7 @@ export default function CTASection({ onOpenApp }: { onOpenApp: () => void }) {
         >
           The future of interaction<br />
           is{' '}
-          <span className="text-gradient-warm">voice.</span>
+          <span className="text-gradient-violet">voice.</span>
         </h2>
 
         <p className="font-mono text-[0.8rem] text-subtle leading-[1.9] mb-10">
@@ -36,14 +36,12 @@ export default function CTASection({ onOpenApp }: { onOpenApp: () => void }) {
         <div className="flex gap-4 justify-center flex-wrap">
           <button
             onClick={onOpenApp}
-            data-cursor="true"
             className="inline-flex items-center gap-2 bg-violet text-white font-mono font-bold text-[0.8rem] tracking-widest uppercase px-8 py-4 rounded-xl hover:bg-violet-light hover:shadow-glow-violet transition-all duration-200"
           >
             Open App <ArrowRight size={16} />
           </button>
           <a
             href="#how-it-works"
-            data-cursor="true"
             className="inline-flex items-center gap-2 bg-transparent text-subtle font-mono text-[0.8rem] tracking-widest uppercase px-8 py-4 rounded-xl border border-border-bright hover:text-primary hover:border-violet/50 transition-all duration-200"
           >
             Learn More

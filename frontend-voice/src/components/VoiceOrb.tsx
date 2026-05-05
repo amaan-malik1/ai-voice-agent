@@ -62,7 +62,6 @@ export default function VoiceOrb({ state, onClick, size = 'lg' }: VoiceOrbProps)
         <motion.div
           style={{ rotateX, rotateY }}
           onClick={onClick}
-          data-cursor="true"
           role={onClick ? 'button' : undefined}
           aria-label={onClick ? STATE_LABELS[state] : undefined}
           tabIndex={onClick ? 0 : undefined}
