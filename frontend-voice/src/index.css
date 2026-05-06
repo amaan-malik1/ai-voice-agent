@@ -23,7 +23,7 @@
   --noise-opacity: 0.3;
 }
 
-[data-theme='light'] {
+[data-theme="light"] {
   color-scheme: light;
   --color-canvas: 245 247 252;
   --color-surface: 255 255 255;
@@ -53,7 +53,9 @@
   body {
     background-color: rgb(var(--color-canvas));
     color: rgb(var(--color-primary));
-    transition: background-color 220ms ease, color 220ms ease;
+    transition:
+      background-color 220ms ease,
+      color 220ms ease;
   }
 
   #root {
@@ -77,7 +79,36 @@
   }
 
   .text-gradient-violet {
-    background: linear-gradient(135deg, #ac44f7, #6b309c);
+    background:
+      radial-gradient(
+        circle at 20% 60%,
+        rgba(170, 198, 115, 0.85),
+        transparent 40%
+      ),
+      radial-gradient(
+        circle at 50% 100%,
+        rgba(116, 218, 138, 0.662),
+        transparent 40%
+      ),
+      linear-gradient(135deg, #b1b8ca, #5a6378, #8098b6);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .text-gradient-ink {
+    background:
+      radial-gradient(
+        circle at 20% 60%,
+        rgba(35, 40, 25, 0.85),
+        transparent 40%
+      ),
+      radial-gradient(
+        circle at 50% 100%,
+        rgba(32, 45, 35, 0.662),
+        transparent 40%
+      ),
+      linear-gradient(135deg, #40475a, #5a6378, #3a5679);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -91,7 +122,9 @@
   }
 
   .border-glow-violet {
-    box-shadow: 0 0 0 1px rgba(123, 92, 245, 0.4), 0 0 20px rgba(123, 92, 245, 0.15);
+    box-shadow:
+      0 0 0 1px rgba(123, 92, 245, 0.4),
+      0 0 20px rgba(123, 92, 245, 0.15);
   }
 
   .bg-noise {

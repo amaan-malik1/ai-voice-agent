@@ -72,9 +72,9 @@ export default function App() {
         onToggleTheme={toggleTheme}
       />
       <main>
-        <Hero onOpenApp={() => setView('app')} />
+        <Hero onOpenApp={() => setView('app')} theme={theme} />
         <Marquee />
-        <HowItWorks />
+        <HowItWorks theme={theme} />
         <VoiceDemo />
         <Features />
         <CTASection onOpenApp={() => setView('app')} />

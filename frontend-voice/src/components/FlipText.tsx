@@ -5,9 +5,10 @@ interface FlipTextProps {
   words: string[]
   interval?: number
   className?: string
+  minWidth?: string
 }
 
-export default function FlipText({ words, interval = 2200, className = '' }: FlipTextProps) {
+export default function FlipText({ words, interval = 2200, className = '', minWidth = '8ch' }: FlipTextProps) {
   const [index, setIndex] = useState(0)
 
   useEffect(() => {
@@ -16,7 +17,7 @@ export default function FlipText({ words, interval = 2200, className = '' }: Fli
   }, [words.length, interval])
 
   return (
-    <span className={`relative inline-block overflow-hidden ${className}`} style={{ minWidth: '8ch' }}>
+    <span className={`relative inline-block overflow-hidden ${className}`} style={{ minWidth }}>
       <AnimatePresence mode="wait">
         <motion.span
           key={index}
