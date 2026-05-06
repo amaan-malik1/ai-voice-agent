@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { Link } from 'react-router'
 import { AnimatePresence, motion } from 'framer-motion'
 import { Menu, X } from 'lucide-react'
 import type { Theme } from '../hooks/useTheme'
@@ -52,14 +53,14 @@ export default function Navbar({ onOpenApp, theme, onToggleTheme }: Props) {
           )}
         >
           {/* Logo */}
-          <a href="#" className="flex items-center gap-2">
+          <Link to={'/'} className="flex items-center gap-2">
             <div className="flex h-8 w-8 items-center justify-center rounded-full bg-violet text-white text-sm font-bold">
               W
             </div>
             <span className="hidden sm:block font-semibold text-sm text-neutral-800 dark:text-white">
               Weblyrix
             </span>
-          </a>
+          </Link>
 
           {/* Nav Items */}
           <div className="hidden md:flex flex-1 justify-center items-center gap-1">
@@ -79,9 +80,9 @@ export default function Navbar({ onOpenApp, theme, onToggleTheme }: Props) {
             <ThemeToggle theme={theme} onToggleTheme={onToggleTheme} />
             <button
               onClick={onOpenApp}
-              className="rounded-full bg-neutral-900 px-4 py-2 text-sm text-white hover:bg-neutral-800 transition dark:bg-white dark:text-black"
+              className="rounded-full bg-neutral-900 px-4 py-2 text-sm text-white hover:bg-neutral-800 transition ease-in-out duration-500 transform dark:bg-white hover:text-white dark:text-black"
             >
-              Open App
+              Open Chat
             </button>
           </div>
 
@@ -127,9 +128,9 @@ export default function Navbar({ onOpenApp, theme, onToggleTheme }: Props) {
                   setOpen(false)
                   onOpenApp()
                 }}
-                className="rounded-full bg-neutral-900 px-4 py-2 text-sm text-white dark:bg-white dark:text-black"
+                className="rounded-full bg-neutral-900 px-4 py-2 text-sm text-white dark:bg-white dark:text-black transition-all ease-in-out duration-500 transform"
               >
-                Open App
+                Open Chat
               </button>
             </div>
           </motion.div>

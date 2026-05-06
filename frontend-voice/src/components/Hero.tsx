@@ -1,125 +1,415 @@
 import { motion, type Variants } from 'framer-motion'
 import { ArrowRight } from 'lucide-react'
-import VoiceOrb from './VoiceOrb'
+import {
+  Canvas,
+  useFrame,
+  useThree,
+} from '@react-three/fiber'
+import {
+  Float,
+  Line,
+  MeshDistortMaterial,
+  OrbitControls,
+  Sphere,
+} from '@react-three/drei'
+import { useMemo, useRef } from 'react'
+import * as THREE from 'three'
 import FlipText from './FlipText'
 import type { Theme } from '../hooks/useTheme'
 
 const containerVariants: Variants = {
   hidden: {},
-  show: { transition: { staggerChildren: 0.13, delayChildren: 0.25 } },
+  show: {
+    transition: {
+      staggerChildren: 0.12,
+      delayChildren: 0.2,
+    },
+  },
 }
 
 const itemVariants: Variants = {
-  hidden: { opacity: 0, y: 40 },
-  show: { opacity: 1, y: 0, transition: { duration: 0.75, ease: 'easeOut' } },
+  hidden: {
+    opacity: 0,
+    y: 40,
+  },
+  show: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.8,
+      ease: 'easeOut',
+    },
+  },
 }
 
-export default function Hero({ onOpenApp, theme }: { onOpenApp: () => void; theme: Theme }) {
-  const heroGradientClass = theme === 'dark' ? 'text-gradient-violet' : 'text-gradient-ink'
+function CameraMotion() {
+  const { camera, mouse } = useThree()
+
+  useFrame(() => {
+    camera.position.x += (mouse.x * 0.7 - camera.position.x) * 0.03
+    camera.position.y += (-mouse.y * 0.7 - camera.position.y) * 0.03
+
+    camera.lookAt(0, 0, 0)
+  })
+
+  return null
+}
+
+function VoiceWaveRing({
+  radius,
+  color,
+  speed,
+}: {
+  radius: number
+  color: string
+  speed: number
+}) {
+  const ref = useRef<THREE.Group>(null)
+
+  const points = useMemo(() => {
+    const pts = []
+
+    for (let i = 0; i <= 240; i++) {
+      const angle = (i / 240) * Math.PI * 2
+
+      const wave =
+        Math.sin(angle * 8) * 0.08 +
+        Math.cos(angle * 4) * 0.05
+
+      const r = radius + wave
+
+      pts.push(
+        new THREE.Vector3(
+          Math.cos(angle) * r,
+          Math.sin(angle) * r,
+          Math.sin(angle * 3) * 0.15
+        )
+      )
+    }
+
+    return pts
+  }, [radius])
+
+  useFrame((state) => {
+    if (!ref.current) return
+
+    ref.current.rotation.z =
+      state.clock.elapsedTime * speed
+
+    ref.current.rotation.x =
+      Math.sin(state.clock.elapsedTime * 0.3) * 0.2
+  })
+
+  return (
+    <group ref={ref}>
+      <Line
+        points={points}
+        color={color}
+        lineWidth={2}
+        transparent
+        opacity={0.9}
+      />
+    </group>
+  )
+}
+
+function NeuralGrid() {
+  const lines = useMemo(() => {
+    return Array.from({ length: 30 }).map(() => [
+      [
+        (Math.random() - 0.5) * 12,
+        (Math.random() - 0.5) * 12,
+        (Math.random() - 0.5) * 6,
+      ],
+      [
+        (Math.random() - 0.5) * 12,
+        (Math.random() - 0.5) * 12,
+        (Math.random() - 0.5) * 6,
+      ],
+    ])
+  }, [])
+
+  return (
+    <>
+      {lines.map((line, i) => (
+        <Line
+          key={i}
+          points={line as any}
+          color="#ffffff"
+          transparent
+          opacity={0.05}
+          lineWidth={1}
+        />
+      ))}
+    </>
+  )
+}
+
+function AIOrb() {
+  const meshRef = useRef<THREE.Mesh>(null)
+
+  useFrame((state) => {
+    if (!meshRef.current) return
+
+    meshRef.current.rotation.x =
+      state.clock.elapsedTime * 0.15
+
+    meshRef.current.rotation.y =
+      state.clock.elapsedTime * 0.2
+  })
+
+  return (
+    <Float
+      speed={2}
+      rotationIntensity={1.5}
+      floatIntensity={2}
+    >
+      <Sphere
+        ref={meshRef}
+        args={[1, 128, 128]}
+        scale={1.6}
+      >
+        <MeshDistortMaterial
+          color="#ac44f7"
+          distort={0.45}
+          speed={2}
+          roughness={0}
+        />
+      </Sphere>
+    </Float>
+  )
+}
+
+function VoiceScene() {
+  return (
+    <>
+      <ambientLight intensity={1.2} />
+
+      <directionalLight
+        position={[3, 3, 5]}
+        intensity={2}
+      />
+
+      <fog attach="fog" args={['#05010d', 5, 14]} />
+
+      <CameraMotion />
+
+      <NeuralGrid />
+
+      <AIOrb />
+
+      <VoiceWaveRing
+        radius={2.2}
+        color="#ac44f7"
+        speed={0.08}
+      />
+
+      <VoiceWaveRing
+        radius={2.7}
+        color="#d8b4fe"
+        speed={-0.05}
+      />
+
+      <VoiceWaveRing
+        radius={3.2}
+        color="#ffffff"
+        speed={0.03}
+      />
+
+      <OrbitControls
+        enableZoom={false}
+        enablePan={false}
+        autoRotate
+        autoRotateSpeed={0.15}
+      />
+    </>
+  )
+}
+
+export default function Hero({
+  onOpenApp,
+  theme,
+}: {
+  onOpenApp: () => void
+  theme: Theme
+}) {
+  const heroGradientClass =
+    theme === 'dark'
+      ? 'text-gradient-violet'
+      : 'text-gradient-ink'
 
   return (
     <section
       id="hero"
-      className="relative flex min-h-[100svh] flex-col items-center justify-start overflow-hidden px-4 pb-16 pt-28 sm:px-6 sm:pb-20 sm:pt-32 md:px-12 md:pb-24 lg:justify-center"
+      className="relative overflow-hidden bg-[#05010d]"
     >
-      <div className="pointer-events-none absolute inset-0" aria-hidden>
-        <div className="absolute top-1/2 left-1/3 h-[600px] w-[600px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-violet/10 blur-[120px]" />
-        <div className="absolute top-1/3 right-1/4 h-[350px] w-[350px] rounded-full bg-teal/10 blur-[100px]" />
+      {/* Background */}
+      <div className="absolute inset-0 overflow-hidden">
+        <div className="absolute left-1/2 top-1/2 h-[700px] w-[700px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#ac44f7]/10 blur-3xl" />
+
+        <div className="absolute left-0 top-0 h-[400px] w-[400px] rounded-full bg-[#6b309c]/10 blur-3xl" />
+
+        <div className="absolute bottom-0 right-0 h-[300px] w-[300px] rounded-full bg-[#d8b4fe]/10 blur-3xl" />
+
+        <div
+          className="absolute inset-0 opacity-[0.06]"
+          style={{
+            backgroundImage:
+              'linear-gradient(rgba(255,255,255,0.08) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.08) 1px, transparent 1px)',
+            backgroundSize: '60px 60px',
+            maskImage:
+              'radial-gradient(circle at center, black 30%, transparent 90%)',
+          }}
+        />
       </div>
 
-      <div
-        className="pointer-events-none absolute inset-0 opacity-100"
-        style={{
-          backgroundImage:
-            'linear-gradient(rgba(123,92,245,0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(123,92,245,0.05) 1px, transparent 1px)',
-          backgroundSize: '64px 64px',
-          maskImage: 'radial-gradient(ellipse 80% 70% at 50% 50%, black 30%, transparent 100%)',
-        }}
-        aria-hidden
-      />
+      <div className="relative z-10 mx-auto flex min-h-screen max-w-7xl flex-col-reverse items-center justify-center gap-10 px-4 pb-20 pt-32 sm:px-6 md:px-10 lg:flex-row lg:gap-16 lg:pb-0">
 
-      <div className="relative z-10 mx-auto grid w-full max-w-7xl items-center gap-10 sm:gap-12 lg:grid-cols-[minmax(0,1.05fr)_minmax(280px,0.95fr)] lg:gap-16">
+        {/* LEFT CONTENT */}
         <motion.div
           variants={containerVariants}
           initial="hidden"
           animate="show"
-          className="flex min-w-0 flex-col"
+          className="flex flex-1 flex-col text-center lg:text-left"
         >
-          <motion.div variants={itemVariants} className="mb-7">
-            <span className="inline-flex items-center gap-2 rounded-full border border-violet/25 bg-violet/8 px-3 py-1.5 font-mono text-[0.58rem] uppercase tracking-[0.24em] text-violet sm:gap-2.5 sm:px-4 sm:py-2 sm:text-[0.68rem] sm:tracking-widest">
-              <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse-soft 
-                 shadow-[0_0_6px_2px_rgba(52,211,153,0.7)] 
-                " />
+          <motion.div
+            variants={itemVariants}
+            className="mb-7"
+          >
+            <span className="inline-flex items-center gap-2 self-center rounded-full border border-violet/20 bg-white/[0.04] px-4 py-2 font-mono text-[0.68rem] uppercase tracking-[0.24em] text-violet backdrop-blur-xl lg:self-start">
+              <span className="h-2 w-2 animate-pulse rounded-full bg-emerald-400 shadow-[0_0_10px_rgba(52,211,153,0.8)]" />
               AI Voice Assistant
             </span>
           </motion.div>
 
           <motion.h1
             variants={itemVariants}
-            className="mb-5 font-display font-extrabold leading-[0.94] tracking-tight text-primary sm:mb-6 sm:leading-[0.98] md:leading-[1.02]"
-            style={{ fontSize: 'clamp(2.35rem, 14vw, 5.5rem)' }}
+            className="mb-6 font-display font-black leading-[0.92] tracking-tight text-white"
+            style={{
+              fontSize: 'clamp(2.8rem, 12vw, 6.5rem)',
+            }}
           >
-            <span className="block md:inline">Speak.</span>
-            <span className="block text-primary md:ml-[0.16em] md:inline">
+            <span className="block">
+              Speak.
+            </span>
+
+            <span className="block">
               <FlipText
-                words={['Think.', 'Learn.', 'Reply.', 'Grow.']}
+                words={[
+                  'Think.',
+                  'Learn.',
+                  'Reply.',
+                  'Grow.',
+                ]}
                 className={heroGradientClass}
                 minWidth="6ch"
               />
             </span>
-            <span className="block text-primary">Repeat.</span>
+
+            <span className="block">
+              Repeat.
+            </span>
           </motion.h1>
 
           <motion.p
             variants={itemVariants}
-            className="mb-8 max-w-[32rem] font-mono text-[0.76rem] leading-[1.8] text-subtle sm:mb-9 sm:text-[0.82rem] sm:leading-[1.9]"
+            className="mx-auto mb-10 max-w-[34rem] font-mono text-[0.82rem] leading-[1.95] text-zinc-400 sm:text-[0.9rem] lg:mx-0"
           >
-            A seamless voice-first experience. Your words are converted to text,
-            processed by AI, and spoken back in natural speech. Hands-free.
-            Instant. Intelligent.
+            Experience intelligent voice-first communication powered by
+            advanced AI. Speak naturally, receive instant responses, and
+            interact with technology like never before.
           </motion.p>
 
           <motion.div
             variants={itemVariants}
-            className="mb-6 flex w-full max-w-[18rem] flex-col gap-3 sm:mb-10 sm:max-w-none sm:flex-row sm:flex-wrap"
+            className="flex flex-col gap-4 sm:flex-row lg:justify-start"
           >
             <button
               onClick={onOpenApp}
-              className="inline-flex w-full items-center justify-center gap-2 rounded-lg border-0 bg-violet px-6 py-3 font-mono text-[0.74rem] font-bold uppercase tracking-widest text-white transition-all duration-200 hover:bg-violet-light hover:shadow-glow-violet sm:w-auto sm:text-[0.78rem]"
+              className="group inline-flex items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-[#ac44f7] to-[#6b309c] px-7 py-4 font-mono text-[0.78rem] font-bold uppercase tracking-widest text-white transition-all duration-500 hover:scale-[1.03] hover:shadow-[0_0_40px_rgba(172,68,247,0.45)]"
             >
-              Open App <ArrowRight size={15} />
+              Open Chat
+
+              <ArrowRight
+                size={15}
+                className="transition-transform duration-300 group-hover:translate-x-1"
+              />
             </button>
+
             <a
               href="#how-it-works"
-              className="inline-flex w-full items-center justify-center gap-2 rounded-lg border border-border-bright bg-transparent px-6 py-3 font-mono text-[0.74rem] uppercase tracking-widest text-subtle transition-all duration-200 hover:border-violet/50 hover:text-primary sm:w-auto sm:text-[0.78rem]"
+              className="inline-flex items-center justify-center rounded-2xl border border-white/10 bg-white/[0.03] px-7 py-4 font-mono text-[0.78rem] uppercase tracking-widest text-zinc-300 backdrop-blur-xl transition-all duration-300 hover:border-[#ac44f7]/40 hover:bg-white/[0.06]"
             >
               How It Works
             </a>
           </motion.div>
-
-          {/* <motion.div variants={itemVariants} className="flex flex-wrap gap-3">
-            {STATS.map((stat) => (
-              <div key={stat.label} className="flex min-w-[90px] flex-col rounded-xl border border-border bg-card px-5 py-3 shadow-card">
-                <span className="mb-1 font-display text-2xl font-extrabold leading-none text-violet-light">{stat.num}</span>
-                <span className="font-mono text-[0.62rem] uppercase tracking-widest text-muted">{stat.label}</span>
-              </div>
-            ))}
-          </motion.div> */}
         </motion.div>
 
+        {/* RIGHT ORBIT */}
         <motion.div
-          initial={{ opacity: 0, scale: 0.85 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.9, delay: 0.4, ease: [0.22, 1, 0.36, 1] }}
-          className="order-last flex min-w-0 items-center justify-center pt-2 sm:pt-4 lg:justify-end sm:flex-col sm:my-20"
+          initial={{
+            opacity: 0,
+            scale: 0.8,
+          }}
+          animate={{
+            opacity: 1,
+            scale: 1,
+          }}
+          transition={{
+            duration: 1.2,
+            delay: 0.3,
+          }}
+          className="relative flex h-[380px] w-full flex-1 items-center justify-center sm:h-[500px] lg:h-[700px]"
         >
-          <VoiceOrb state="idle" size="hero" />
-        </motion.div>
-      </div>
+          {/* Floating Card */}
+          <motion.div
+            animate={{
+              y: [-10, 10, -10],
+            }}
+            transition={{
+              repeat: Infinity,
+              duration: 6,
+              ease: 'easeInOut',
+            }}
+            className="absolute left-2 top-10 z-20 rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-3 backdrop-blur-xl sm:left-10 sm:top-24"
+          >
+            <p className="text-[10px] uppercase tracking-[0.25em] text-zinc-500 sm:text-xs">
+              Status
+            </p>
 
-      <div className="absolute bottom-8 left-1/2 hidden -translate-x-1/2 flex-col items-center gap-2 sm:flex" aria-hidden>
-        <div className="h-14 w-px origin-top animate-scroll-drop bg-gradient-to-b from-violet to-transparent" />
-        <span className="font-mono text-[0.58rem] uppercase tracking-[0.25em] text-muted">Scroll</span>
+            <p className="mt-1 text-sm font-semibold text-emerald-400 sm:text-lg">
+              Listening...
+            </p>
+          </motion.div>
+
+          {/* Floating Card */}
+          <motion.div
+            animate={{
+              y: [12, -12, 12],
+            }}
+            transition={{
+              repeat: Infinity,
+              duration: 7,
+              ease: 'easeInOut',
+            }}
+            className="absolute bottom-10 right-2 z-20 rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-3 backdrop-blur-xl sm:bottom-24 sm:right-10"
+          >
+            <p className="text-[10px] uppercase tracking-[0.25em] text-zinc-500 sm:text-xs">
+              AI
+            </p>
+
+            <p className="mt-1 text-sm font-semibold text-violet-300 sm:text-lg">
+              Processing
+            </p>
+          </motion.div>
+
+          {/* 3D Canvas */}
+          <div className="h-full w-full">
+            <Canvas camera={{ position: [0, 0, 8] }}>
+              <VoiceScene />
+            </Canvas>
+          </div>
+        </motion.div>
       </div>
     </section>
   )

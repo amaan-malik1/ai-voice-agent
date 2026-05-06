@@ -1,3 +1,5 @@
+
+import { Link } from "react-router-dom"
 const LINKS = {
   Product: [
     { label: 'How It Works', href: '#how-it-works' },
@@ -5,14 +7,14 @@ const LINKS = {
     { label: 'Features', href: '#features' },
   ],
   'Support Links': [
-    { label: 'Privacy Policy', href: '#' },
-    { label: 'Terms of Us', href: '#' },
+    { label: 'Privacy Policy', href: '/privacy' },
+    { label: 'Terms of Us', href: '/terms' },
   ],
 
   'Other Links': [
-    { label: 'About Us', href: '#' },
-    { label: 'Career', href: '#' },
-    { label: 'Contact Us', href: '#' },
+    { label: 'About Us', href: '/about' },
+    { label: 'Career', href: '/careers' },
+    { label: 'Contact Us', href: '/contact' },
   ]
 }
 
@@ -40,13 +42,13 @@ export default function Footer() {
               <ul className="flex flex-col gap-3">
                 {links.map(link => (
                   <li key={link.label}>
-                    <a
-                      href={link.href}
+                    <Link
+                      to={link.href}
                       className="font-mono text-[0.72rem] text-subtle hover:text-violet transition-colors duration-200"
                       data-cursor="true"
                     >
                       {link.label}
-                    </a>
+                    </Link>
                   </li>
                 ))}
               </ul>

@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { Route, Routes } from 'react-router'
 import Navbar from './components/Navbar'
 import Hero from './components/Hero'
 import Marquee from './components/Marquee'
@@ -10,6 +11,11 @@ import Footer from './components/Footer'
 import useTheme from './hooks/useTheme'
 import AppShell from './pages/AppShell'
 import ThemeToggle from './components/ThemeToggle'
+import AboutPage from './pages/About'
+import Contact from './pages/Contact'
+import TermsOfUs from './pages/TermsOfUs'
+import Policy from './pages/Policy'
+import NotFound from './pages/NotFound'
 
 type View = 'landing' | 'app'
 
@@ -47,6 +53,7 @@ export default function App() {
     )
   }
 
+
   return (
     <div className="relative min-h-screen bg-canvas font-sans text-primary theme-transition">
       <div
@@ -71,15 +78,70 @@ export default function App() {
         theme={theme}
         onToggleTheme={toggleTheme}
       />
-      <main>
-        <Hero onOpenApp={() => setView('app')} theme={theme} />
-        <Marquee />
-        <HowItWorks theme={theme} />
-        <VoiceDemo />
-        <Features />
-        <CTASection onOpenApp={() => setView('app')} />
-      </main>
+
+      <Routes>
+        {/* landing page route */}
+        <Route
+          path='/'
+          element={
+            <div>
+              <main>
+                <Hero onOpenApp={() => setView('app')} theme={theme} />
+                <Marquee />
+                <HowItWorks theme={theme} />
+                <VoiceDemo />
+                <Features />
+                <CTASection onOpenApp={() => setView('app')} />
+              </main>
+            </div>
+          }
+        />
+
+
+        {/* About page */}
+        <Route path='/about'
+          element={
+            <AboutPage />
+          }
+        />
+
+
+        {/* Contact page */}
+        <Route path='/contact'
+          element={
+            <Contact />
+          }
+        />
+
+        {/* Terms of Us */}
+        <Route path='/terms'
+          element={
+            <TermsOfUs />
+          }
+        />
+
+        {/* Privacy page */}
+        <Route path='/privacy'
+          element={
+            <Policy />
+          }
+        />
+        {/* career page */}
+        {/* <Route path='/career'
+          element={
+            <Policy />
+          }
+        /> */}
+
+        <Route
+          path='/*'
+          element={
+            <NotFound />
+          }
+        />
+
+      </Routes>
       <Footer />
-    </div>
+    </div >
   )
 }
